@@ -1,11 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
-
-//global variables
+// global variables
 
 const string GuestDetailsFile = "Guest Details File";
 
@@ -19,22 +19,27 @@ struct GuestDetails
     int days;
 };
 
-class Hotel{
+class Hotel
+{
 
     int luxurySuite = 20;
     int deluxeRooms = 30;
     int standardRooms = 40;
     int economyRooms = 10;
 
-    public:
-        void addClient();
-        void checkRoomAvailability();
-        vector<GuestDetails> loadGuestDetails();
+public:
+    void addClient();
+    void checkRoomAvailability();
+    void saveGuestDetails(const vector<GuestDetails> &guesstDetails);
+    vector<GuestDetails> loadGuestDetails();
 };
-//global object variable
+// global object variable
 Hotel hotel;
 
-void Hotel::addClient(){
+void mainMenu();
+
+void Hotel::addClient()
+{
 
     vector<GuestDetails> guestDetails;
     GuestDetails g;
@@ -56,27 +61,27 @@ void Hotel::addClient(){
 
         switch (roomChoice)
         {
-            case 1:
-                luxurySuite -= 1;
-                g.roomQuality = "Luxury Suite";
-                break;
-            case 2:
-                deluxeRooms -= 1;
-                g.roomQuality = "Deluxe Rooms";
-                break;
-            case 3:
-                standardRooms -= 1;
-                g.roomQuality = "Standard Rooms";
-                break;
-            case 4:
-                economyRooms -= 1;
-                g.roomQuality = "Economy Rooms";
-                break;
-            default:
-                cout << "Wrong input";
-                break;
+        case 1:
+            luxurySuite -= 1;
+            g.roomQuality = "Luxury Suite";
+            break;
+        case 2:
+            deluxeRooms -= 1;
+            g.roomQuality = "Deluxe Rooms";
+            break;
+        case 3:
+            standardRooms -= 1;
+            g.roomQuality = "Standard Rooms";
+            break;
+        case 4:
+            economyRooms -= 1;
+            g.roomQuality = "Economy Rooms";
+            break;
+        default:
+            cout << "Wrong input";
+            break;
         }
-    } while (roomChoice != 5);
+    } while (!(roomChoice <= 4 && roomChoice > 0));
 
     cout << "Enter your name: ";
     cin.ignore();
@@ -92,7 +97,10 @@ void Hotel::addClient(){
     cin >> g.days;
 }
 
-
+void Hotel::saveGuestDetails(const vector<GuestDetails> &guestDetails)
+{
+    ofstream file(GuestDetailsFile);
+}
 
 int main()
 {
@@ -111,7 +119,7 @@ void hotelDetails()
     cout << "Contact: +255-789-567-980" << endl;
 
     cout << "\n\n\t\tNumber of Rooms: 100" << endl;
-    cout << "Luxury Suites (20 rooms)" <<endl;
+    cout << "Luxury Suites (20 rooms)" << endl;
     cout << "\tLarge rooms with premium features like king-sized beds, private balconies, and spa access." << endl;
     cout << "Deluxe Rooms(30 rooms)" << endl;
     cout << "\t High-end rooms with free WiFi, pool views, and upgraded furnishings." << endl;
@@ -122,15 +130,12 @@ void hotelDetails()
     cout << "---------------------------------" << endl;
 }
 
-
-
 void displayBookedRooms()
 {
-    
 }
 
-
-void mainMenu(){
+void mainMenu()
+{
     int choice = 0;
 
     do
