@@ -5,48 +5,55 @@
 
 using namespace std;
 
-// global variables
+// Global variables to store file names
+const string GuestDetailsFile = "Guest Details File.txt"; 
+const string roomsAvailble = "rooms available.txt";  
 
-const string GuestDetailsFile = "Guest Details File";
 
+// Structure to hold guest details
 struct GuestDetails
 {
-    string guestName;
-    string guestAddress;
-    string phoneNo;
-    string roomQuality;
-    string roomNumber;
-    int days;
+    string guestName;    
+    string guestAddress; 
+    string phoneNo;      
+    string roomQuality;  
+    string roomNumber;   
+    int days;            
 };
 
+// Hotel class to manage hotel operations
 class Hotel
 {
-
-    int luxurySuite = 20;
-    int deluxeRooms = 30;
-    int standardRooms = 40;
-    int economyRooms = 10;
-
+    // Room availability counters
+    int luxurySuite = 20;   
+    int deluxeRooms = 30;   
+    int standardRooms = 40; 
+    int economyRooms = 10;  
 public:
-    void addClient();
-    void checkRoomAvailability();
-    void saveGuestDetails(const vector<GuestDetails> &guesstDetails);
-    vector<GuestDetails> loadGuestDetails();
+    // Functions to manage hotel operations
+    void addClient();                                                // Function to add a new client
+    void checkRoomAvailability();                                    // Function to check room availability
+    void saveGuestDetails(const vector<GuestDetails> &guestDetails); // Save guest details to a file
+    vector<GuestDetails> loadGuestDetails();                         // Load guest details from a file
 };
-// global object variable
+
+// Global object for Hotel class
 Hotel hotel;
 
-void mainMenu();
-
+// Function declarations
+void mainMenu();           
+void hotelDetails();      
+void displayBookedRooms(); 
+// Function to add a new client
 void Hotel::addClient()
 {
+    vector<GuestDetails> guestDetails; // Vector to hold guest details
+    GuestDetails g;                    // Temporary variable for guest details
 
-    vector<GuestDetails> guestDetails;
-    GuestDetails g;
-
-    int roomChoice = 0;
+    int roomChoice = 0; // Variable to store room choice
     do
     {
+        // Display room options
         cout << "-----Booking a Room -----\n"
              << endl;
         cout << "1. Luxury Suites" << endl;
@@ -59,33 +66,35 @@ void Hotel::addClient()
         cout << "Enter your choice(1-4): ";
         cin >> roomChoice;
 
+      
         switch (roomChoice)
         {
         case 1:
-            luxurySuite -= 1;
+            luxurySuite -= 1; // Decrease luxury suite count
             g.roomQuality = "Luxury Suite";
             break;
         case 2:
-            deluxeRooms -= 1;
+            deluxeRooms -= 1; // Decrease deluxe room count
             g.roomQuality = "Deluxe Rooms";
             break;
         case 3:
-            standardRooms -= 1;
+            standardRooms -= 1; // Decrease standard room count
             g.roomQuality = "Standard Rooms";
             break;
         case 4:
-            economyRooms -= 1;
+            economyRooms -= 1; // Decrease economy room count
             g.roomQuality = "Economy Rooms";
             break;
         default:
-            cout << "Wrong input";
+            cout << "Wrong input"; // Handle invalid input
             break;
         }
-    } while (!(roomChoice <= 4 && roomChoice > 0));
+    } while (!(roomChoice <= 4 && roomChoice > 0)); // Repeat until valid input
 
+    // Get guest details
     cout << "Enter your name: ";
-    cin.ignore();
-    getline(cin, g.guestName);
+    cin.ignore();              // Clear input buffer
+    getline(cin, g.guestName); 
 
     cout << "Enter your phone number: ";
     getline(cin, g.phoneNo);
@@ -94,22 +103,26 @@ void Hotel::addClient()
     getline(cin, g.guestAddress);
 
     cout << "Days to stay: ";
-    cin >> g.days;
+    cin >> g.days; 
 }
 
+// Function to save guest details to a file
 void Hotel::saveGuestDetails(const vector<GuestDetails> &guestDetails)
 {
-    ofstream file(GuestDetailsFile);
+    ofstream file(GuestDetailsFile); 
+    // Code to write guest details will be added later
 }
 
 int main()
 {
+    // Display the system title and start the main menu
     cout << "GIOVANNA'S HOTEL MANAGEMENT SYSTEM" << endl;
     mainMenu();
 
     return 0;
 }
 
+// Function to display hotel details
 void hotelDetails()
 {
     cout << "\n----- HOTEL DETAILS -----" << endl;
@@ -122,24 +135,28 @@ void hotelDetails()
     cout << "Luxury Suites (20 rooms)" << endl;
     cout << "\tLarge rooms with premium features like king-sized beds, private balconies, and spa access." << endl;
     cout << "Deluxe Rooms(30 rooms)" << endl;
-    cout << "\t High-end rooms with free WiFi, pool views, and upgraded furnishings." << endl;
+    cout << "\tHigh-end rooms with free WiFi, pool views, and upgraded furnishings." << endl;
     cout << "Standard Rooms(40 rooms)" << endl;
-    cout << "\t Comfortable rooms with essential amenities like free WiFi and quality furnishings." << endl;
+    cout << "\tComfortable rooms with essential amenities like free WiFi and quality furnishings." << endl;
     cout << "Economy Rooms(10 rooms)." << endl;
     cout << "\tAffordable rooms with basic features, targeting budget travelers." << endl;
     cout << "---------------------------------" << endl;
 }
 
+// Function to display booked rooms (to be implemented)
 void displayBookedRooms()
 {
+    // Code to display booked rooms will be added later
 }
 
+// Main menu function
 void mainMenu()
 {
-    int choice = 0;
+    int choice = 0; // Variable to store user choice
 
     do
     {
+        // Display main menu options
         cout << "\n------ MAIN MENU ------" << endl;
         cout << "1. Hotel's details" << endl;
         cout << "2. Book a room" << endl;
@@ -149,24 +166,25 @@ void mainMenu()
         cout << "Enter your choice: ";
         cin >> choice;
 
+      
         switch (choice)
         {
         case 1:
-            hotelDetails();
+            hotelDetails(); // Display hotel details
             break;
         case 2:
-            hotel.addClient();
+            hotel.addClient(); // Book a room
             break;
         case 3:
-            displayBookedRooms();
+            displayBookedRooms(); // Display booked rooms
             break;
         case 4:
-            cout << "Exiting..." << endl;
+            cout << "Exiting..." << endl; 
             break;
         default:
-            cout << "Wrong Input!" << endl;
+            cout << "Wrong Input!" << endl; 
             break;
         }
 
-    } while (choice != 4);
+    } while (choice != 4); // Repeat until the user chooses to exit
 }
