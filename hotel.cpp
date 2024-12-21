@@ -85,29 +85,28 @@ void Hotel::addClient()
             if(checkRoomAvailability(0)){
                 luxurySuite -= 1; // Decrease luxury suite count
                 g.roomQuality = "Luxury Suite";
-                g.roomNumber = "L"+luxurySuite;
+                g.roomNumber = "L"+ to_string(luxurySuite);
             }  
             break;
         case 2:
             if(checkRoomAvailability(1)){
                 deluxeRooms -= 1; // Decrease deluxe room count
                 g.roomQuality = "Deluxe Rooms";
-                g.roomNumber = "D"+ deluxeRooms;
+                g.roomNumber = "D" + to_string(deluxeRooms);
             }
-            
             break;
         case 3:
             if (checkRoomAvailability(2)){
                 standardRooms -= 1; // Decrease standard room count
                 g.roomQuality = "Standard Rooms";
-                g.roomNumber = "S" + standardRooms;
+                g.roomNumber = "S-" + to_string(standardRooms);
             }
             break;
         case 4:
             if (checkRoomAvailability(3)){
                 economyRooms -= 1; // Decrease economy room count
                 g.roomQuality = "Economy Rooms";
-                g.roomNumber = "E" + economyRooms;
+                g.roomNumber = "E" + to_string(economyRooms);
             }
             break;
         default:
@@ -124,7 +123,6 @@ void Hotel::addClient()
 
     // Get guest details
     cout << "Enter your name: ";
-    cin.ignore(); // Clear input buffer
     getline(cin, g.guestName);
 
     cout << "Enter your phone number: ";
