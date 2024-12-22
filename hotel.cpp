@@ -31,7 +31,7 @@ class Hotel
 
 public:
     // Functions to manage hotel operations
-    void addClient();             // Function to add a new client
+    void addClient();                            // Function to add a new client
     bool checkRoomAvailability(int roomQuality); // Function to check room availability
     vector<int> loadRoomAvailable();
     void saveRoomAvailable(const vector<int> &roomsRemains);
@@ -50,11 +50,12 @@ void displayBookedRooms();
 void Hotel::addClient()
 {
     vector<GuestDetails> guestDetails = loadGuestDetails(); // Vector to hold guest details
-    GuestDetails g;                    // Temporary variable for guest details
+    GuestDetails g;                                         // Temporary variable for guest details
     vector<int> roomsRemain = loadRoomAvailable();
     bool available;
 
-    if(roomsRemain.empty()){
+    if (roomsRemain.empty())
+    {
         roomsRemain.push_back(luxurySuite);
         roomsRemain.push_back(deluxeRooms);
         roomsRemain.push_back(standardRooms);
@@ -62,7 +63,7 @@ void Hotel::addClient()
         saveRoomAvailable(roomsRemain);
     }
     int roomChoice = 0; // Variable to store room choice
-    
+
     do
     {
         // Display room options
@@ -82,43 +83,44 @@ void Hotel::addClient()
         switch (roomChoice)
         {
         case 1:
-            if(checkRoomAvailability(0)){
-                luxurySuite -= 1; // Decrease luxury suite count
+            if (checkRoomAvailability(0))
+            {
+                roomsRemain.at(roomChoice - 1) = roomsRemain[roomChoice - 1] - 1;
                 g.roomQuality = "Luxury Suite";
-                g.roomNumber = "L"+ to_string(luxurySuite);
-            }  
+                g.roomNumber = "L" + to_string(roomsRemain.at(roomChoice - 1));
+            }
             break;
         case 2:
-            if(checkRoomAvailability(1)){
-                deluxeRooms -= 1; // Decrease deluxe room count
+            if (checkRoomAvailability(1))
+            {
+                roomsRemain.at(roomChoice - 1) = roomsRemain[roomChoice - 1] - 1;
                 g.roomQuality = "Deluxe Rooms";
-                g.roomNumber = "D" + to_string(deluxeRooms);
+                g.roomNumber = "D" + to_string(roomsRemain.at(roomChoice - 1));
             }
             break;
         case 3:
-            if (checkRoomAvailability(2)){
-                standardRooms -= 1; // Decrease standard room count
+            if (checkRoomAvailability(2))
+            {
+                roomsRemain.at(roomChoice - 1) = roomsRemain[roomChoice - 1] - 1;
                 g.roomQuality = "Standard Rooms";
-                g.roomNumber = "S-" + to_string(standardRooms);
+                g.roomNumber = "S" + to_string(roomsRemain.at(roomChoice - 1));
             }
             break;
         case 4:
-            if (checkRoomAvailability(3)){
-                economyRooms -= 1; // Decrease economy room count
+            if (checkRoomAvailability(3))
+            {
+                roomsRemain.at(roomChoice - 1) = roomsRemain[roomChoice - 1] - 1;
                 g.roomQuality = "Economy Rooms";
-                g.roomNumber = "E" + to_string(economyRooms);
+                g.roomNumber = "E" + to_string(roomsRemain.at(roomChoice - 1));
             }
             break;
         default:
-            cout << "Wrong input"<<endl; // Handle invalid input
+            cout << "Wrong input" << endl; // Handle invalid input
             break;
         }
     } while (!(roomChoice <= 4 && roomChoice > 0)); // Repeat until valid input
-    roomsRemain.clear();
-    roomsRemain.push_back(luxurySuite);
-    roomsRemain.push_back(deluxeRooms);
-    roomsRemain.push_back(standardRooms);
-    roomsRemain.push_back(economyRooms);
+
+   
     saveRoomAvailable(roomsRemain);
 
     // Get guest details
@@ -139,39 +141,62 @@ void Hotel::addClient()
 }
 
 // Function to save guest details to a file
-void Hotel::saveGuestDetails(const vector<GuestDetails> &guestDetails){
-    ofstream file(GuestDetailsFile, ios::trunc);
-    if (file.is_open()){
-        for(const auto &g : guestDetails){
-            file << g.guestName<<endl;
+void Hotel::saveGuestDetails(const vector<GuestDetails> &guestDetails)
+{
+    
+    ofstream file(GuestDetailsFile, ios::trunc); // Overwrite file with all current records
+    if (file.is_open())
+    {
+        for (const auto &g : guestDetails)
+        {
+            file << g.guestName << endl;
             file << g.guestAddress << endl;
             file << g.phoneNo << endl;
             file << g.roomQuality << endl;
             file << g.roomNumber << endl;
             file << g.days << endl;
+            file << "----------" << endl; // Delimiter between guest records
         }
         file.close();
     }
 }
 
-vector<GuestDetails> Hotel::loadGuestDetails(){
+vector<GuestDetails> Hotel::loadGuestDetails()
+{
     ifstream file(GuestDetailsFile);
-    vector<GuestDetails> guestdetails;
+    vector<GuestDetails> guestDetails;
 
-    if (file.is_open()){
-
+    if (file.is_open())
+    {
         GuestDetails g;
-        while(getline(file, g.guestName)){
-            getline(file, g.guestAddress);
-            getline(file, g.phoneNo);
-            getline(file, g.roomQuality);
-            getline(file, g.roomNumber);
-            file >> g.days;
-            guestdetails.push_back(g);
+        string line;
+
+        while (getline(file, line))
+        {
+            if (line == "----------")
+            {
+                guestDetails.push_back(g);
+                g = GuestDetails();        
+                continue;
+            }
+
+            if (g.guestName.empty())
+                g.guestName = line;
+            else if (g.guestAddress.empty())
+                g.guestAddress = line;
+            else if (g.phoneNo.empty())
+                g.phoneNo = line;
+            else if (g.roomQuality.empty())
+                g.roomQuality = line;
+            else if (g.roomNumber.empty())
+                g.roomNumber = line;
+            else
+                g.days = stoi(line); // Convert string to int
         }
+
         file.close();
     }
-    return guestdetails;
+    return guestDetails;
 }
 int main()
 {
@@ -185,10 +210,12 @@ int main()
 bool Hotel::checkRoomAvailability(int roomQuality)
 {
     vector<int> roomsRemain = loadRoomAvailable();
-    if ((roomsRemain[roomQuality] - 1)>0){
+    if ((roomsRemain[roomQuality] - 1) > 0)
+    {
         return true;
     }
-    else{
+    else
+    {
         return false;
     }
 }
@@ -217,13 +244,14 @@ vector<int> Hotel::loadRoomAvailable()
 void Hotel::saveRoomAvailable(const vector<int> &roomsRemain)
 {
     ofstream file(roomsAvailable, ios::trunc);
-    if (file.is_open()){
+    if (file.is_open())
+    {
         for (const auto &r : roomsRemain)
         {
             file << r << endl;
         }
         file.close();
-    }    
+    }
 }
 // Function to display hotel details
 void hotelDetails()
