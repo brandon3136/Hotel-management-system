@@ -18,6 +18,7 @@ struct GuestDetails
     string phoneNo;
     string roomQuality;
     string roomNumber;
+    string password;
     int days;
 };
 
@@ -39,6 +40,9 @@ public:
     void saveGuestDetails(const vector<GuestDetails> &guestDetails); // Save guest details to a file
     vector<GuestDetails> loadGuestDetails();                         // Load guest details from a file
     void displayGuestDetails();
+    void guest();
+    void guestMenu(const GuestDetails &g);
+    void billing();
 };
 
 // Global object for Hotel class
@@ -48,6 +52,54 @@ Hotel hotel;
 void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
+
+void Hotel::guestMenu(const GuestDetails &g)
+{
+    cout << "Hello, " << g.guestName << endl;
+    int choice = 0;
+    do{
+        cout << "------- Guest Menu ------" << endl;
+        cout << "1. Display your room details" << endl;
+    } while (choice != 0);
+}
+
+void Hotel::guest(){
+    vector<GuestDetails> guestDetails = loadGuestDetails();
+    string guestId;
+    bool found = false;
+
+    cout << "Your name or room number: ";
+    cin.ignore();
+    getline(cin, guestId);
+    string password;
+    int count = 3;
+
+    for(auto &g: guestDetails){
+        if((guestId == g.guestName) || (guestId == g.roomNumber)){
+            found = true;
+            while(count){
+                cout << "Enter your password: ";
+                getline(cin, password);
+
+                if(password == g.password){
+                    guestMenu(g);
+                    break;
+                }else{
+                    cout << "Enter the password again "<< count<< " left";
+                    count -= 1;
+                }
+            }
+            
+        }
+    }
+    if(!found){
+        cout << "That room number or name has not been found!!" << endl;
+    }
+}
+void Hotel::billing()
+{
+    vector<GuestDetails> guestDetails = loadGuestDetails();
+}
 
 void Hotel::displayGuestDetails()
 {
@@ -150,29 +202,53 @@ void Hotel::addClient()
                 g.roomNumber = "E" + to_string(roomsRemain.at(roomChoice - 1));
             }
             break;
+        case 5:
+            cout << "Exiting to main menu..." << endl;
+            break;
         default:
             cout << "Wrong input" << endl; // Handle invalid input
             break;
         }
-    } while (!(roomChoice <= 4 && roomChoice > 0)); // Repeat until valid input
+    } while (!(roomChoice <= 5 && roomChoice > 0)); // Repeat until valid input
 
-    saveRoomAvailable(roomsRemain);
+    if(roomChoice!=5){
+        saveRoomAvailable(roomsRemain);
 
-    // Get guest details
-    cout << "Enter your name: ";
-    getline(cin, g.guestName);
+        // Get guest details
+        cout << "Enter your name: ";
+        getline(cin, g.guestName);
 
-    cout << "Enter your phone number: ";
-    getline(cin, g.phoneNo);
+        string confirm;
+        while (true)
+        {
+            cout << "Enter your password: ";
+            getline(cin, g.password);
 
-    cout << "Enter your address: ";
-    getline(cin, g.guestAddress);
+            cout << "Confirm your password: ";
+            getline(cin, confirm);
 
-    cout << "Days to stay: ";
-    cin >> g.days;
-    guestDetails.push_back(g);
+            if (g.password == confirm)
+            {
+                break;
+            }
+            else
+            {
+                cout << "Wrong Password!!!" << endl;
+            }
+        }
 
-    saveGuestDetails(guestDetails);
+        cout << "Enter your phone number: ";
+        getline(cin, g.phoneNo);
+
+        cout << "Enter your address: ";
+        getline(cin, g.guestAddress);
+
+        cout << "Days to stay: ";
+        cin >> g.days;
+        guestDetails.push_back(g);
+
+        saveGuestDetails(guestDetails);
+    }
 }
 
 // Function to save guest details to a file
@@ -185,6 +261,7 @@ void Hotel::saveGuestDetails(const vector<GuestDetails> &guestDetails)
         for (const auto &g : guestDetails)
         {
             file << g.guestName << endl;
+            file << g.password << endl;
             file << g.guestAddress << endl;
             file << g.phoneNo << endl;
             file << g.roomQuality << endl;
@@ -217,6 +294,8 @@ vector<GuestDetails> Hotel::loadGuestDetails()
 
             if (g.guestName.empty())
                 g.guestName = line;
+            else if (g.password.empty())
+                g.password = line;
             else if (g.guestAddress.empty())
                 g.guestAddress = line;
             else if (g.phoneNo.empty())
@@ -331,7 +410,8 @@ void mainMenu()
         cout << "1. Hotel's details" << endl;
         cout << "2. Book a room" << endl;
         cout << "3. Display booked rooms" << endl;
-        cout << "4. Exit" << endl;
+        cout << "4. Login to guest" << endl;
+        cout << "5. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -348,6 +428,9 @@ void mainMenu()
             hotel.displayGuestDetails(); // Display booked rooms
             break;
         case 4:
+            hotel.guest();
+            break;
+        case 5:
             cout << "Exiting..." << endl;
             break;
         default:
@@ -355,5 +438,5 @@ void mainMenu()
             break;
         }
 
-    } while (choice != 4); // Repeat until the user chooses to exit
+    } while (choice != 5); // Repeat until the user chooses to exit
 }
