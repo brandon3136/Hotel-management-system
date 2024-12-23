@@ -85,7 +85,7 @@ void Hotel::guest(){
                     guestMenu(g);
                     break;
                 }else{
-                    cout << "Enter the password again "<< count<< " left";
+                    cout << "Enter the password again "<< count<< " left"<<endl;
                     count -= 1;
                 }
             }
