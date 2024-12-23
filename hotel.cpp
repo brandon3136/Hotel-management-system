@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -37,6 +38,7 @@ public:
     void saveRoomAvailable(const vector<int> &roomsRemains);
     void saveGuestDetails(const vector<GuestDetails> &guestDetails); // Save guest details to a file
     vector<GuestDetails> loadGuestDetails();                         // Load guest details from a file
+    void displayGuestDetails();
 };
 
 // Global object for Hotel class
@@ -46,6 +48,36 @@ Hotel hotel;
 void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
+
+
+void Hotel::displayGuestDetails(){
+    vector<GuestDetails> guestDetails = loadGuestDetails();
+    int count = 1;
+
+    if(!guestDetails.empty()){
+        cout << "\n\t\t\t\t-------- Guest Details --------" << endl;
+        cout << left << setw(5) << "No."
+        <<setw(20)<<"Guest Name"
+        <<setw(15)<<"Guest Address"
+        <<setw(15)<<"Phone No."
+        <<setw(15)<<"Room Quality"
+        <<setw(15)<<"Room Number"
+        <<setw(5)<<"Days"<<endl;
+        for(const auto &g: guestDetails){
+            cout << left << setw(5) << count
+                 << setw(20) << g.guestName
+                 << setw(15) << g.guestAddress
+                 << setw(15) << g.phoneNo
+                 << setw(15) << g.roomQuality
+                 << setw(15) << g.roomNumber
+                 << setw(5) << g.days << endl;
+
+            count += 1;
+        }
+    }else{
+        cout << "\nNo guest details found!!" << endl;
+    }
+}
 // Function to add a new client
 void Hotel::addClient()
 {
@@ -306,7 +338,7 @@ void mainMenu()
             hotel.addClient(); // Book a room
             break;
         case 3:
-            displayBookedRooms(); // Display booked rooms
+            hotel.displayGuestDetails(); // Display booked rooms
             break;
         case 4:
             cout << "Exiting..." << endl;
