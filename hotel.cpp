@@ -49,21 +49,23 @@ void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
 
-
-void Hotel::displayGuestDetails(){
+void Hotel::displayGuestDetails()
+{
     vector<GuestDetails> guestDetails = loadGuestDetails();
     int count = 1;
 
-    if(!guestDetails.empty()){
+    if (!guestDetails.empty())
+    {
         cout << "\n\t\t\t\t-------- Guest Details --------" << endl;
         cout << left << setw(5) << "No."
-        <<setw(20)<<"Guest Name"
-        <<setw(15)<<"Guest Address"
-        <<setw(15)<<"Phone No."
-        <<setw(15)<<"Room Quality"
-        <<setw(15)<<"Room Number"
-        <<setw(5)<<"Days"<<endl;
-        for(const auto &g: guestDetails){
+             << setw(20) << "Guest Name"
+             << setw(15) << "Guest Address"
+             << setw(15) << "Phone No."
+             << setw(15) << "Room Quality"
+             << setw(15) << "Room Number"
+             << setw(5) << "Days" << endl;
+        for (const auto &g : guestDetails)
+        {
             cout << left << setw(5) << count
                  << setw(20) << g.guestName
                  << setw(15) << g.guestAddress
@@ -74,7 +76,9 @@ void Hotel::displayGuestDetails(){
 
             count += 1;
         }
-    }else{
+    }
+    else
+    {
         cout << "\nNo guest details found!!" << endl;
     }
 }
@@ -101,10 +105,10 @@ void Hotel::addClient()
         // Display room options
         cout << "-----Booking a Room -----\n"
              << endl;
-        cout << "1. Luxury Suites" << endl;
-        cout << "2. Deluxe Rooms" << endl;
-        cout << "3. Standard Rooms" << endl;
-        cout << "4. Economy Rooms" << endl;
+        cout << "1. Luxury Suites (" << roomsRemain.at(0) << ")" << endl;
+        cout << "2. Deluxe Rooms (" << roomsRemain.at(1) << ")" << endl;
+        cout << "3. Standard Rooms (" << roomsRemain.at(2) << ")" << endl;
+        cout << "4. Economy Rooms (" << roomsRemain.at(3) << ")" << endl;
         cout << "5. Go to main menu\n"
              << endl;
 
@@ -152,7 +156,6 @@ void Hotel::addClient()
         }
     } while (!(roomChoice <= 4 && roomChoice > 0)); // Repeat until valid input
 
-   
     saveRoomAvailable(roomsRemain);
 
     // Get guest details
@@ -175,7 +178,7 @@ void Hotel::addClient()
 // Function to save guest details to a file
 void Hotel::saveGuestDetails(const vector<GuestDetails> &guestDetails)
 {
-    
+
     ofstream file(GuestDetailsFile, ios::trunc); // Overwrite file with all current records
     if (file.is_open())
     {
@@ -208,7 +211,7 @@ vector<GuestDetails> Hotel::loadGuestDetails()
             if (line == "----------")
             {
                 guestDetails.push_back(g);
-                g = GuestDetails();        
+                g = GuestDetails();
                 continue;
             }
 
@@ -296,13 +299,17 @@ void hotelDetails()
 
     cout << "\n\n\t\tNumber of Rooms: 100" << endl;
     cout << "Luxury Suites (20 rooms)" << endl;
-    cout << "\tLarge rooms with premium features like king-sized beds, private balconies, and spa access." << endl;
+    cout << "\tLarge rooms with premium features like king-sized beds, private balconies, and spa access.\n\t Price: $1000 per night\n"
+         << endl;
     cout << "Deluxe Rooms(30 rooms)" << endl;
-    cout << "\tHigh-end rooms with free WiFi, pool views, and upgraded furnishings." << endl;
+    cout << "\tHigh-end rooms with free WiFi, pool views, and upgraded furnishings.\n\t Price: $800 per night\n"
+         << endl;
     cout << "Standard Rooms(40 rooms)" << endl;
-    cout << "\tComfortable rooms with essential amenities like free WiFi and quality furnishings." << endl;
+    cout << "\tComfortable rooms with essential amenities like free WiFi and quality furnishings.\n\t Price: $600 per night\n"
+         << endl;
     cout << "Economy Rooms(10 rooms)." << endl;
-    cout << "\tAffordable rooms with basic features, targeting budget travelers." << endl;
+    cout << "\tAffordable rooms with basic features, targeting budget travelers.\n\t Price: $400 per night\n"
+         << endl;
     cout << "---------------------------------" << endl;
 }
 
