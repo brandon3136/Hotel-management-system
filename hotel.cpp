@@ -42,7 +42,7 @@ public:
     void displayGuestDetails();
     void guest();
     void guestMenu(const GuestDetails &g);
-    void billing();
+    int billing(string roomQuality, int days);
 };
 
 // Global object for Hotel class
@@ -57,13 +57,32 @@ void Hotel::guestMenu(const GuestDetails &g)
 {
     cout << "Hello, " << g.guestName << endl;
     int choice = 0;
-    do{
+    int bill;
+    do
+    {
         cout << "------- Guest Menu ------" << endl;
         cout << "1. Display your room details" << endl;
-    } while (choice != 0);
+        cout << "2. Billing details" << endl;
+        cout << "3. Exit" << endl;
+
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch(choice){
+            case 1:
+                break;
+            case 2:
+                cout << "The total bill for the stay: $" << billing(g.roomQuality, g.days) << endl;
+                break;
+            default:
+                cout << "Wrong Input";
+                break;
+        }
+    } while (choice != 3);
 }
 
-void Hotel::guest(){
+void Hotel::guest()
+{
     vector<GuestDetails> guestDetails = loadGuestDetails();
     string guestId;
     bool found = false;
@@ -74,31 +93,54 @@ void Hotel::guest(){
     string password;
     int count = 3;
 
-    for(auto &g: guestDetails){
-        if((guestId == g.guestName) || (guestId == g.roomNumber)){
+    for (auto &g : guestDetails)
+    {
+        if ((guestId == g.guestName) || (guestId == g.roomNumber))
+        {
             found = true;
-            while(count){
+            while (count)
+            {
                 cout << "Enter your password: ";
                 getline(cin, password);
 
-                if(password == g.password){
+                if (password == g.password)
+                {
                     guestMenu(g);
                     break;
-                }else{
-                    cout << "Enter the password again "<< count<< " left"<<endl;
+                }
+                else
+                {
+                    cout << "Enter the password again " << count << " left" << endl;
                     count -= 1;
                 }
             }
-            
         }
     }
-    if(!found){
+    if (!found)
+    {
         cout << "That room number or name has not been found!!" << endl;
     }
 }
-void Hotel::billing()
+int Hotel::billing(string roomQuality, int days)
 {
-    vector<GuestDetails> guestDetails = loadGuestDetails();
+    int bill = 0;
+    if (roomQuality == "Luxury Suite"){
+        bill = 1000 * days;
+    }
+    else if (roomQuality == "Deluxe Rooms")
+    {
+        bill = 800 * days;
+    }
+    else if (roomQuality == "Standard Rooms")
+    {
+        bill =  600 * days;
+    }
+    else if (roomQuality == "Economy Rooms")
+    {
+        bill = 400 * days;
+    }
+
+    return bill;
 }
 
 void Hotel::displayGuestDetails()
@@ -211,7 +253,8 @@ void Hotel::addClient()
         }
     } while (!(roomChoice <= 5 && roomChoice > 0)); // Repeat until valid input
 
-    if(roomChoice!=5){
+    if (roomChoice != 5)
+    {
         saveRoomAvailable(roomsRemain);
 
         // Get guest details
