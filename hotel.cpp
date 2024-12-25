@@ -42,6 +42,7 @@ public:
     void displayGuestDetails();
     void guest();
     void guestMenu(const GuestDetails &g);
+    void dispalyOneGuestDetails(const GuestDetails &g);
     int billing(string roomQuality, int days);
 };
 
@@ -55,7 +56,7 @@ void displayBookedRooms();
 
 void Hotel::guestMenu(const GuestDetails &g)
 {
-    cout << "Hello, " << g.guestName << endl;
+    cout << "\n\nHello, " << g.guestName << endl;
     int choice = 0;
     int bill;
     do
@@ -68,17 +69,29 @@ void Hotel::guestMenu(const GuestDetails &g)
         cout << "Enter your choice: ";
         cin >> choice;
 
-        switch(choice){
-            case 1:
-                break;
-            case 2:
-                cout << "The total bill for the stay: $" << billing(g.roomQuality, g.days) << endl;
-                break;
-            default:
-                cout << "Wrong Input";
-                break;
+        switch (choice)
+        {
+        case 1:
+            dispalyOneGuestDetails(g);
+            break;
+        case 2:
+            cout << "The total bill for the stay: $" << billing(g.roomQuality, g.days) << endl;
+            break;
+        default:
+            cout << "Wrong Input";
+            break;
         }
     } while (choice != 3);
+}
+
+void Hotel::dispalyOneGuestDetails(const GuestDetails &g){
+    cout << "\nInfo details about, " << g.guestName << endl<<endl;
+    cout << "Guest name: " << g.guestName << endl;
+    cout << "Room Number: " << g.roomNumber << endl;
+    cout << "Room Quality: " << g.roomQuality << endl;
+    cout << "Days to stay: " << g.days << endl;
+    cout << "Address: " << g.guestAddress << endl;
+    cout << "Phone No.: " << g.phoneNo << endl<<endl;
 }
 
 void Hotel::guest()
@@ -124,7 +137,8 @@ void Hotel::guest()
 int Hotel::billing(string roomQuality, int days)
 {
     int bill = 0;
-    if (roomQuality == "Luxury Suite"){
+    if (roomQuality == "Luxury Suite")
+    {
         bill = 1000 * days;
     }
     else if (roomQuality == "Deluxe Rooms")
@@ -133,7 +147,7 @@ int Hotel::billing(string roomQuality, int days)
     }
     else if (roomQuality == "Standard Rooms")
     {
-        bill =  600 * days;
+        bill = 600 * days;
     }
     else if (roomQuality == "Economy Rooms")
     {
