@@ -10,6 +10,7 @@ using namespace std;
 const string GuestDetailsFile = "Guest Details File.txt";
 const string roomsAvailable = "rooms available.txt";
 
+
 // Structure to hold guest details
 struct GuestDetails
 {
@@ -44,6 +45,7 @@ public:
     void guestMenu(const GuestDetails &g);
     void dispalyOneGuestDetails(const GuestDetails &g);
     int billing(string roomQuality, int days);
+    int orderFood();
 };
 
 // Global object for Hotel class
@@ -64,6 +66,7 @@ void Hotel::guestMenu(const GuestDetails &g)
         cout << "------- Guest Menu ------" << endl;
         cout << "1. Display your room details" << endl;
         cout << "2. Billing details" << endl;
+        cout << "3. Order food" << endl;
         cout << "3. Exit" << endl;
 
         cout << "Enter your choice: ";
@@ -77,11 +80,60 @@ void Hotel::guestMenu(const GuestDetails &g)
         case 2:
             cout << "The total bill for the stay: $" << billing(g.roomQuality, g.days) << endl;
             break;
+        case 3:
+            bill = orderFood();
+            break;
         default:
             cout << "Wrong Input";
             break;
         }
     } while (choice != 3);
+}
+
+
+int Hotel::orderFood(){
+    int choice = 0;
+    string food;
+    int billOfFood;
+    cout << "\n Welcome to Giovanna's Restaurant" << endl;
+    cout << "Order food here...\n" << endl;
+
+    cout << "1. Burger (@$40)" << endl;
+    cout << "2. Pizza (@$80)" << endl;
+    cout << "3. Hamburger (@$45)" << endl;
+    cout << "4. Rice (@$60)" << endl;
+    cout << "5. Ugali (@30)" << endl;
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    switch(choice){
+        case 1:
+            food = "Burger";
+            billOfFood = 40;
+            break;
+        case 2:
+            food = "Pizza";
+            billOfFood = 80;
+            break;
+        case 3:
+            food = "Hamburger";
+            billOfFood = 45;
+            break;
+        case 4:
+            food = "Rice";
+            billOfFood = 60;
+            break;
+        case 5:
+            food = "Ugali";
+            billOfFood = 30;
+            break;
+        default:
+            cout << "Wrong input" << endl;
+    }
+
+    cout << "Ok,"<< food <<" done ordered"<<endl;
+
+    return billOfFood;
 }
 
 void Hotel::dispalyOneGuestDetails(const GuestDetails &g){
@@ -405,10 +457,7 @@ vector<int> Hotel::loadRoomAvailable()
         }
         file.close();
     }
-    // cout << "loading..." << endl;
-    // for(const auto &r : roomsRemain){
-    //     cout << r << endl;
-    // }
+    
     return roomsRemain;
 }
 
