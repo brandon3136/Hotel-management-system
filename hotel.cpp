@@ -10,7 +10,6 @@ using namespace std;
 const string GuestDetailsFile = "Guest Details File.txt";
 const string roomsAvailable = "rooms available.txt";
 
-
 // Structure to hold guest details
 struct GuestDetails
 {
@@ -46,6 +45,7 @@ public:
     void dispalyOneGuestDetails(const GuestDetails &g);
     int billing(string roomQuality, int days);
     int orderFood();
+    void receipt(const GuestDetails &g);
 };
 
 // Global object for Hotel class
@@ -55,6 +55,21 @@ Hotel hotel;
 void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
+
+void Hotel::receipt(const GuestDetails &g){
+    int bill = billing(g.roomQuality, g.days);
+    cout << "\n\t------ RECEIPT ------" << endl;
+    cout << "\tGiovanna's Luxury Inn" << endl;
+    cout << "Name of the client: " << g.guestName << endl;
+    cout << "Address of the client: " << g.guestAddress << endl;
+    cout << "Phone No. of the client: " << g.phoneNo << endl;
+    cout << "Room number of the client: " << g.roomNumber << endl;
+    cout << "Room quality of the client: " << g.roomQuality << endl;
+    cout << "Days to stay: " << g.days << endl;
+    cout << "Price to stay: $" << bill << endl<<endl;
+    cout << "\t------ End Of Receipt -------" <<endl;
+    cout << "\t------ Thank you -------" <<endl<<endl;
+}
 
 void Hotel::guestMenu(const GuestDetails &g)
 {
@@ -67,7 +82,8 @@ void Hotel::guestMenu(const GuestDetails &g)
         cout << "1. Display your room details" << endl;
         cout << "2. Billing details" << endl;
         cout << "3. Order food" << endl;
-        cout << "3. Exit" << endl;
+        cout << "4. View receipt" << endl;
+        cout << "5. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -83,20 +99,24 @@ void Hotel::guestMenu(const GuestDetails &g)
         case 3:
             bill = orderFood();
             break;
+        case 4:
+            receipt(g);
+            break;
         default:
             cout << "Wrong Input";
             break;
         }
-    } while (choice != 3);
+    } while (choice != 5);
 }
 
-
-int Hotel::orderFood(){
+int Hotel::orderFood()
+{
     int choice = 0;
     string food;
     int billOfFood;
     cout << "\n Welcome to Giovanna's Restaurant" << endl;
-    cout << "Order food here...\n" << endl;
+    cout << "Order food here...\n"
+         << endl;
 
     cout << "1. Burger (@$40)" << endl;
     cout << "2. Pizza (@$80)" << endl;
@@ -106,44 +126,48 @@ int Hotel::orderFood(){
     cout << "Enter your choice: ";
     cin >> choice;
 
-    switch(choice){
-        case 1:
-            food = "Burger";
-            billOfFood = 40;
-            break;
-        case 2:
-            food = "Pizza";
-            billOfFood = 80;
-            break;
-        case 3:
-            food = "Hamburger";
-            billOfFood = 45;
-            break;
-        case 4:
-            food = "Rice";
-            billOfFood = 60;
-            break;
-        case 5:
-            food = "Ugali";
-            billOfFood = 30;
-            break;
-        default:
-            cout << "Wrong input" << endl;
+    switch (choice)
+    {
+    case 1:
+        food = "Burger";
+        billOfFood = 40;
+        break;
+    case 2:
+        food = "Pizza";
+        billOfFood = 80;
+        break;
+    case 3:
+        food = "Hamburger";
+        billOfFood = 45;
+        break;
+    case 4:
+        food = "Rice";
+        billOfFood = 60;
+        break;
+    case 5:
+        food = "Ugali";
+        billOfFood = 30;
+        break;
+    default:
+        cout << "Wrong input" << endl;
     }
 
-    cout << "Ok,"<< food <<" done ordered"<<endl;
+    cout << "Ok," << food << " done ordered" << endl;
 
     return billOfFood;
 }
 
-void Hotel::dispalyOneGuestDetails(const GuestDetails &g){
-    cout << "\nInfo details about, " << g.guestName << endl<<endl;
+void Hotel::dispalyOneGuestDetails(const GuestDetails &g)
+{
+    cout << "\nInfo details about, " << g.guestName << endl
+         << endl;
     cout << "Guest name: " << g.guestName << endl;
     cout << "Room Number: " << g.roomNumber << endl;
     cout << "Room Quality: " << g.roomQuality << endl;
     cout << "Days to stay: " << g.days << endl;
     cout << "Address: " << g.guestAddress << endl;
-    cout << "Phone No.: " << g.phoneNo << endl<<endl;
+    cout << "Phone No.: " << g.phoneNo << endl
+         << endl;
 }
 
 void Hotel::guest()
@@ -328,11 +352,10 @@ void Hotel::addClient()
         getline(cin, g.guestName);
 
         string confirm;
+        cout << "Enter your password: ";
+        getline(cin, g.password);
         while (true)
         {
-            cout << "Enter your password: ";
-            getline(cin, g.password);
-
             cout << "Confirm your password: ";
             getline(cin, confirm);
 
@@ -357,6 +380,8 @@ void Hotel::addClient()
         guestDetails.push_back(g);
 
         saveGuestDetails(guestDetails);
+
+        receipt(g);
     }
 }
 
@@ -457,7 +482,7 @@ vector<int> Hotel::loadRoomAvailable()
         }
         file.close();
     }
-    
+
     return roomsRemain;
 }
 
