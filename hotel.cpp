@@ -46,6 +46,7 @@ public:
     int billing(string roomQuality, int days);
     int orderFood();
     void receipt(const GuestDetails &g);
+    void deleteGuest();
 };
 
 // Global object for Hotel class
@@ -55,6 +56,38 @@ Hotel hotel;
 void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
+
+void Hotel::deleteGuest(){
+    vector<GuestDetails> guestDetails = loadGuestDetails();
+    string rN;
+    bool found = false;
+
+    if (guestDetails.empty())
+    {
+        cout << "Guest data not found!, unable to delete guests' details" << endl;
+    }
+    else
+    {
+        cout << "Enter the Guest's room number to delete: ";
+        cin >> rN;
+        for (auto i = guestDetails.begin(); i != guestDetails.end(); i++)
+        {
+            if (i->roomNumber == rN)
+            {
+                found = true;
+                guestDetails.erase(i);
+                saveGuestDetails(guestDetails);
+                cout << "The guest has been deleted successfully\n"
+                     << endl;
+            }
+        }
+        if (!found)
+        {
+            cout << "The guest is not found!"
+                 << endl;
+        }
+    }
+}
 
 void Hotel::receipt(const GuestDetails &g){
     int bill = billing(g.roomQuality, g.days);
@@ -542,7 +575,8 @@ void mainMenu()
         cout << "2. Book a room" << endl;
         cout << "3. Display booked rooms" << endl;
         cout << "4. Login to guest" << endl;
-        cout << "5. Exit" << endl;
+        cout << "5. Delete guest" << endl;
+        cout << "6. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -562,6 +596,9 @@ void mainMenu()
             hotel.guest();
             break;
         case 5:
+            hotel.deleteGuest();
+            break;
+        case 6:
             cout << "Exiting..." << endl;
             break;
         default:
@@ -569,5 +606,5 @@ void mainMenu()
             break;
         }
 
-    } while (choice != 5); // Repeat until the user chooses to exit
+    } while (choice != 6); // Repeat until the user chooses to exit
 }
