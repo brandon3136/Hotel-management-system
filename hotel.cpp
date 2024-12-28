@@ -57,7 +57,8 @@ void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
 
-void Hotel::deleteGuest(){
+void Hotel::deleteGuest()
+{
     vector<GuestDetails> guestDetails = loadGuestDetails();
     string rN;
     bool found = false;
@@ -89,7 +90,8 @@ void Hotel::deleteGuest(){
     }
 }
 
-void Hotel::receipt(const GuestDetails &g){
+void Hotel::receipt(const GuestDetails &g)
+{
     int bill = billing(g.roomQuality, g.days);
     cout << "\n\t------ RECEIPT ------" << endl;
     cout << "\tGiovanna's Luxury Inn" << endl;
@@ -99,9 +101,11 @@ void Hotel::receipt(const GuestDetails &g){
     cout << "Room number of the client: " << g.roomNumber << endl;
     cout << "Room quality of the client: " << g.roomQuality << endl;
     cout << "Days to stay: " << g.days << endl;
-    cout << "Price to stay: $" << bill << endl<<endl;
-    cout << "\t------ End Of Receipt -------" <<endl;
-    cout << "\t------ Thank you -------" <<endl<<endl;
+    cout << "Price to stay: $" << bill << endl
+         << endl;
+    cout << "\t------ End Of Receipt -------" << endl;
+    cout << "\t------ Thank you -------" << endl
+         << endl;
 }
 
 void Hotel::guestMenu(const GuestDetails &g)
