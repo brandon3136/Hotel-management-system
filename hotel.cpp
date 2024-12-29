@@ -31,22 +31,27 @@ class Hotel
     int standardRooms = 40;
     int economyRooms = 10;
 
-public:
-    // Functions to manage hotel operations
-    void addClient();                            // Function to add a new client
-    bool checkRoomAvailability(int roomQuality); // Function to check room availability
-    vector<int> loadRoomAvailable();
-    void saveRoomAvailable(const vector<int> &roomsRemains);
-    void saveGuestDetails(const vector<GuestDetails> &guestDetails); // Save guest details to a file
-    vector<GuestDetails> loadGuestDetails();                         // Load guest details from a file
-    void displayGuestDetails();
-    void guest();
-    void guestMenu(const GuestDetails &g);
-    void dispalyOneGuestDetails(const GuestDetails &g);
-    int billing(string roomQuality, int days);
-    int orderFood();
-    void receipt(const GuestDetails &g);
-    void deleteGuest();
+    private:
+        const string adminUsername = "admin";
+        const string adminPassword = "admin";
+
+    public:
+        // Functions to manage hotel operations
+        void addClient();                            // Function to add a new client
+        bool checkRoomAvailability(int roomQuality); // Function to check room availability
+        vector<int> loadRoomAvailable();
+        void saveRoomAvailable(const vector<int> &roomsRemains);
+        void saveGuestDetails(const vector<GuestDetails> &guestDetails); // Save guest details to a file
+        vector<GuestDetails> loadGuestDetails();                         // Load guest details from a file
+        void displayGuestDetails();
+        void guest();
+        void guestMenu(const GuestDetails &g);
+        void dispalyOneGuestDetails(const GuestDetails &g);
+        int billing(string roomQuality, int days);
+        int orderFood();
+        void receipt(const GuestDetails &g);
+        void deleteGuest();
+        void adminLogin();
 };
 
 // Global object for Hotel class
@@ -57,8 +62,30 @@ void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
 
-void Hotel::deleteGuest()
-{
+
+void Hotel::adminLogin(){
+    string username, password;
+    cout << "\n--- Admin Login ---\n";
+    while(true){
+        cout << "Enter username: ";
+        cin >> username;
+        cout << "Enter password: ";
+        cin >> password;
+
+        if (username == adminUsername && password == adminPassword)
+        {
+            cout << "\nLogin successful!\n";
+            break;
+        }
+        else
+        {
+            cout << "\nInvalid credentials. Access denied.\n";
+        }
+    }
+    
+}
+
+void Hotel::deleteGuest(){
     vector<GuestDetails> guestDetails = loadGuestDetails();
     string rN;
     bool found = false;
@@ -90,8 +117,7 @@ void Hotel::deleteGuest()
     }
 }
 
-void Hotel::receipt(const GuestDetails &g)
-{
+void Hotel::receipt(const GuestDetails &g){
     int bill = billing(g.roomQuality, g.days);
     cout << "\n\t------ RECEIPT ------" << endl;
     cout << "\tGiovanna's Luxury Inn" << endl;
@@ -101,11 +127,9 @@ void Hotel::receipt(const GuestDetails &g)
     cout << "Room number of the client: " << g.roomNumber << endl;
     cout << "Room quality of the client: " << g.roomQuality << endl;
     cout << "Days to stay: " << g.days << endl;
-    cout << "Price to stay: $" << bill << endl
-         << endl;
-    cout << "\t------ End Of Receipt -------" << endl;
-    cout << "\t------ Thank you -------" << endl
-         << endl;
+    cout << "Price to stay: $" << bill << endl<<endl;
+    cout << "\t------ End Of Receipt -------" <<endl;
+    cout << "\t------ Thank you -------" <<endl<<endl;
 }
 
 void Hotel::guestMenu(const GuestDetails &g)
@@ -487,6 +511,7 @@ int main()
 {
     // Display the system title and start the main menu
     cout << "GIOVANNA'S HOTEL MANAGEMENT SYSTEM" << endl;
+    hotel.adminLogin();
     mainMenu();
 
     return 0;
