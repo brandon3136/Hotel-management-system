@@ -65,6 +65,7 @@ public:
     void saveAdminCredentials(const AdminCredentials &a);
     void updateAdminCredentials();
     void displayAdminCredentials();
+    void displayRoomsAvailable();
 };
 
 // Global object for Hotel class
@@ -74,6 +75,23 @@ Hotel hotel;
 void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
+
+void Hotel::displayRoomsAvailable(){
+    vector<int> roomsRemain = loadRoomAvailable();
+    if (roomsRemain.empty())
+    {
+        roomsRemain.push_back(luxurySuite);
+        roomsRemain.push_back(deluxeRooms);
+        roomsRemain.push_back(standardRooms);
+        roomsRemain.push_back(economyRooms);
+        saveRoomAvailable(roomsRemain);
+    }
+    cout << "----- Rooms Available -----" << endl;
+    cout << "1. Luxury Suites :" << roomsRemain.at(0)  << endl;
+    cout << "2. Deluxe Rooms :" << roomsRemain.at(1) << endl;
+    cout << "3. Standard Rooms :" << roomsRemain.at(2) << endl;
+    cout << "4. Economy Rooms :" << roomsRemain.at(3) << endl;
+}
 
 void Hotel::displayAdminCredentials()
 {
@@ -176,8 +194,9 @@ void Hotel::adminMenu()
         cout << "2. Delete a guest" << endl;
         cout << "3. Update your credentials" << endl;
         cout << "4. View your credentials" << endl;
+        cout << "5. Display rooms available" << endl;
 
-        cout << "5. Exit" << endl;
+        cout << "6. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -197,6 +216,9 @@ void Hotel::adminMenu()
             displayAdminCredentials();
             break;
         case 5:
+            displayRoomsAvailable();
+            break;
+        case 6:
             cout << "Exiting..." << endl;
             break;
         default:
@@ -204,7 +226,7 @@ void Hotel::adminMenu()
             break;
         }
 
-    } while (choice != 5);
+    } while (choice != 6);
 }
 
 void Hotel::adminLogin()
