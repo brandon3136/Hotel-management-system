@@ -26,6 +26,7 @@ struct GuestDetails
 struct AdminCredentials{
     string newAdminUsername;
     string newAdminPassword;
+    bool update = false;
 };
 
 // Hotel class to manage hotel operations
@@ -62,6 +63,7 @@ class Hotel
         AdminCredentials loadAdminCredentials();
         void saveAdminCredentials(const AdminCredentials &a);
         void updateAdminCredentials();
+        void displayAdminCredentials();
 };
 
 // Global object for Hotel class
@@ -72,14 +74,47 @@ void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
 
+void Hotel::displayAdminCredentials(){
+    AdminCredentials a = loadAdminCredentials();
+    if(!a.update){
+        cout << "username: " << adminUsername << endl;
+        cout << "Password: " << adminPassword << endl;
+    }
+    else{
+        cout << "username: " << a.newAdminUsername << endl;
+        cout << "password: " << a.newAdminPassword << endl;
+        }
+}
+
 void Hotel::updateAdminCredentials(){
     AdminCredentials a;
+    string password;
+    string confirm;
     cout << "\n------ Updating Admin Credentials -------" << endl;
     cout << "Enter the User name: ";
+    cin.ignore();
     getline(cin, a.newAdminUsername);
 
-    cout << "Enter the password: ";
-    getline(cin, a.newAdminPassword);
+    while(true){
+        cout << "Enter the password: ";
+        getline(cin, password);
+
+        cout << "Confirm the password: ";
+        getline(cin, confirm);
+
+        if(confirm == password){
+            a.newAdminPassword = confirm;
+            break;
+        }else{
+            cout << "\nWrong Password\n"
+                 << endl;
+        }
+    }
+
+    
+
+
+    a.update = true;
 
     saveAdminCredentials(a);
     cout << "Update successfull" << endl;
@@ -91,12 +126,11 @@ AdminCredentials Hotel::loadAdminCredentials(){
     if(file.is_open()){
         while(file>>a.newAdminUsername){
             file >> a.newAdminPassword;
+            file >> a.update;
         }
     }
-    else{
-        cout << "File not opened" << endl;
-    }
     file.close();
+    return a;
 }
 
 
@@ -104,7 +138,8 @@ void Hotel::saveAdminCredentials(const AdminCredentials &a){
     ofstream file(adminCredentialsFile, ios::trunc);
     if(file.is_open()){
         file << a.newAdminUsername << endl;
-        file << a.newAdminPassword;
+        file << a.newAdminPassword <<endl;
+        file << a.update;
     }
     else{
         cout << "File is not opened" << endl;
@@ -112,14 +147,22 @@ void Hotel::saveAdminCredentials(const AdminCredentials &a){
     file.close();
 }
 void Hotel::adminMenu(){
+    AdminCredentials a = loadAdminCredentials();
     int choice = 0;
-    cout << "\n Hello" << adminUsername;
+    if(!a.update){
+        cout << "\n Hello " << adminUsername;
+    }else{
+        cout << "\n Hello " << a.newAdminUsername;
+    }
+    
     do{
         cout << "\n------ Admin Menu -------" << endl;
         cout << "1. View guests' details" << endl;
         cout << "2. Delete a guest" << endl;
         cout << "3. Update your credentials" << endl;
-        cout << "4. Exit" << endl;
+        cout << "4. View your credentials" << endl;
+
+        cout << "5. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -136,6 +179,9 @@ void Hotel::adminMenu(){
             updateAdminCredentials();
             break;
         case 4:
+            displayAdminCredentials();
+            break;
+        case 5:
             cout<<"Exiting..."<<endl;
             break;
         default:
@@ -143,27 +189,44 @@ void Hotel::adminMenu(){
             break;
         }
 
-    } while (choice != 4);
+    } while (choice != 5);
 }
 
 void Hotel::adminLogin(){
     string username, password;
+    AdminCredentials a = loadAdminCredentials();
     cout << "\n--- Admin Login ---\n";
+
     while(true){
         cout << "Enter username: ";
         cin >> username;
         cout << "Enter password: ";
         cin >> password;
 
-        if (username == adminUsername && password == adminPassword)
-        {
-            cout << "\nLogin successful!\n";
-            break;
+        if(!a.update){
+            if (username == adminUsername && password == adminPassword)
+            {
+                cout << "\nLogin successful!\n";
+                break;
+            }
+            else
+            {
+                cout << "\nInvalid credentials. Access denied.\n";
+            }
+        }else{
+            if (username == a.newAdminUsername && password == a.newAdminPassword)
+            {
+                cout << "\nLogin successful!\n";
+                break;
+            }
+            else
+            {
+                cout << "\nInvalid credentials. Access denied.\n";
+            }
         }
-        else
-        {
-            cout << "\nInvalid credentials. Access denied.\n";
-        }
+
+        
+        
     }
     adminMenu();
 }
