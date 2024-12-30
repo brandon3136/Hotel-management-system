@@ -78,9 +78,11 @@ void Hotel::updateAdminCredentials(){
     cout << "Enter the User name: ";
     getline(cin, a.newAdminUsername);
 
-    cout << "Enter the: ";
-    getline(cin, a.newAdminUsername);
+    cout << "Enter the password: ";
+    getline(cin, a.newAdminPassword);
 
+    saveAdminCredentials(a);
+    cout << "Update successfull" << endl;
 }
 
 AdminCredentials Hotel::loadAdminCredentials(){
