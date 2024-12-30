@@ -9,6 +9,7 @@ using namespace std;
 // Global variables to store file names
 const string GuestDetailsFile = "Guest Details File.txt";
 const string roomsAvailable = "rooms available.txt";
+const string adminCredentialsFile = "Admin credentials.txt";
 
 // Structure to hold guest details
 struct GuestDetails
@@ -20,6 +21,11 @@ struct GuestDetails
     string roomNumber;
     string password;
     int days;
+};
+
+struct AdminCredentials{
+    string newAdminUsername;
+    string newAdminPassword;
 };
 
 // Hotel class to manage hotel operations
@@ -53,6 +59,8 @@ class Hotel
         void deleteGuest();
         void adminLogin();
         void adminMenu();
+        AdminCredentials loadAdminCredentials();
+        void saveAdminCredentials(const AdminCredentials &a);
 };
 
 // Global object for Hotel class
@@ -63,9 +71,25 @@ void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
 
+AdminCredentials Hotel::loadAdminCredentials(){
+    
+}
 
+
+void Hotel::saveAdminCredentials(const AdminCredentials &a){
+    ofstream file(adminCredentialsFile, ios::trunc);
+    if(file.is_open()){
+        file << a.newAdminUsername << endl;
+        file << a.newAdminUsername;
+    }
+    else{
+        cout << "File is not opened" << endl;
+    }
+    file.close();
+}
 void Hotel::adminMenu(){
     int choice = 0;
+    cout << "\n Hello" << adminUsername;
     do{
         cout << "\n------ Admin Menu -------" << endl;
         cout << "1. View guests' details" << endl;
