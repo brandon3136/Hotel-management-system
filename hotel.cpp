@@ -52,6 +52,7 @@ class Hotel
         void receipt(const GuestDetails &g);
         void deleteGuest();
         void adminLogin();
+        void adminMenu();
 };
 
 // Global object for Hotel class
@@ -62,6 +63,36 @@ void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
 
+
+void Hotel::adminMenu(){
+    int choice = 0;
+    do{
+        cout << "\n------ Admin Menu -------" << endl;
+        cout << "1. View guests' details" << endl;
+        cout << "2. Delete a guest" << endl;
+        cout << "3. Exit" << endl;
+
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            hotel.displayGuestDetails();
+            break;
+        case 2:
+            hotel.deleteGuest();
+            break;
+        case 3:
+            cout<<"Exiting..."<<endl;
+            break;
+        default:
+            cout << "Wrong Input!" << endl;
+            break;
+        }
+
+    } while (choice != 3);
+}
 
 void Hotel::adminLogin(){
     string username, password;
@@ -82,7 +113,7 @@ void Hotel::adminLogin(){
             cout << "\nInvalid credentials. Access denied.\n";
         }
     }
-    
+    adminMenu();
 }
 
 void Hotel::deleteGuest(){
@@ -511,7 +542,7 @@ int main()
 {
     // Display the system title and start the main menu
     cout << "GIOVANNA'S HOTEL MANAGEMENT SYSTEM" << endl;
-    hotel.adminLogin();
+
     mainMenu();
 
     return 0;
@@ -602,10 +633,9 @@ void mainMenu()
         cout << "\n------ MAIN MENU ------" << endl;
         cout << "1. Hotel's details" << endl;
         cout << "2. Book a room" << endl;
-        cout << "3. Display booked rooms" << endl;
-        cout << "4. Login to guest" << endl;
-        cout << "5. Delete guest" << endl;
-        cout << "6. Exit" << endl;
+        cout << "3. Guest login" << endl;
+        cout << "4. Admin login" << endl;
+        cout << "5. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -619,15 +649,12 @@ void mainMenu()
             hotel.addClient(); // Book a room
             break;
         case 3:
-            hotel.displayGuestDetails(); // Display booked rooms
-            break;
-        case 4:
             hotel.guest();
             break;
-        case 5:
-            hotel.deleteGuest();
+        case 4:
+            hotel.adminLogin();
             break;
-        case 6:
+        case 5:
             cout << "Exiting..." << endl;
             break;
         default:
@@ -635,5 +662,5 @@ void mainMenu()
             break;
         }
 
-    } while (choice != 6); // Repeat until the user chooses to exit
+    } while (choice != 5); // Repeat until the user chooses to exit
 }
