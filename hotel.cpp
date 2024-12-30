@@ -61,6 +61,7 @@ class Hotel
         void adminMenu();
         AdminCredentials loadAdminCredentials();
         void saveAdminCredentials(const AdminCredentials &a);
+        void updateAdminCredentials();
 };
 
 // Global object for Hotel class
@@ -71,8 +72,29 @@ void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
 
+void Hotel::updateAdminCredentials(){
+    AdminCredentials a;
+    cout << "\n------ Updating Admin Credentials -------" << endl;
+    cout << "Enter the User name: ";
+    getline(cin, a.newAdminUsername);
+
+    cout << "Enter the: ";
+    getline(cin, a.newAdminUsername);
+
+}
+
 AdminCredentials Hotel::loadAdminCredentials(){
-    
+    AdminCredentials a;
+    ifstream file(adminCredentialsFile);
+    if(file.is_open()){
+        while(file>>a.newAdminUsername){
+            file >> a.newAdminPassword;
+        }
+    }
+    else{
+        cout << "File not opened" << endl;
+    }
+    file.close();
 }
 
 
@@ -80,7 +102,7 @@ void Hotel::saveAdminCredentials(const AdminCredentials &a){
     ofstream file(adminCredentialsFile, ios::trunc);
     if(file.is_open()){
         file << a.newAdminUsername << endl;
-        file << a.newAdminUsername;
+        file << a.newAdminPassword;
     }
     else{
         cout << "File is not opened" << endl;
@@ -94,7 +116,8 @@ void Hotel::adminMenu(){
         cout << "\n------ Admin Menu -------" << endl;
         cout << "1. View guests' details" << endl;
         cout << "2. Delete a guest" << endl;
-        cout << "3. Exit" << endl;
+        cout << "3. Update your credentials" << endl;
+        cout << "4. Exit" << endl;
 
         cout << "Enter your choice: ";
         cin >> choice;
@@ -108,6 +131,9 @@ void Hotel::adminMenu(){
             hotel.deleteGuest();
             break;
         case 3:
+            updateAdminCredentials();
+            break;
+        case 4:
             cout<<"Exiting..."<<endl;
             break;
         default:
@@ -115,7 +141,7 @@ void Hotel::adminMenu(){
             break;
         }
 
-    } while (choice != 3);
+    } while (choice != 4);
 }
 
 void Hotel::adminLogin(){
