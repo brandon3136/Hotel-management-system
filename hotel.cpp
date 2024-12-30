@@ -23,7 +23,8 @@ struct GuestDetails
     int days;
 };
 
-struct AdminCredentials{
+struct AdminCredentials
+{
     string newAdminUsername;
     string newAdminPassword;
     bool update = false;
@@ -38,32 +39,32 @@ class Hotel
     int standardRooms = 40;
     int economyRooms = 10;
 
-    private:
-        const string adminUsername = "admin";
-        const string adminPassword = "admin";
+private:
+    const string adminUsername = "admin";
+    const string adminPassword = "admin";
 
-    public:
-        // Functions to manage hotel operations
-        void addClient();                            // Function to add a new client
-        bool checkRoomAvailability(int roomQuality); // Function to check room availability
-        vector<int> loadRoomAvailable();
-        void saveRoomAvailable(const vector<int> &roomsRemains);
-        void saveGuestDetails(const vector<GuestDetails> &guestDetails); // Save guest details to a file
-        vector<GuestDetails> loadGuestDetails();                         // Load guest details from a file
-        void displayGuestDetails();
-        void guest();
-        void guestMenu(const GuestDetails &g);
-        void dispalyOneGuestDetails(const GuestDetails &g);
-        int billing(string roomQuality, int days);
-        int orderFood();
-        void receipt(const GuestDetails &g);
-        void deleteGuest();
-        void adminLogin();
-        void adminMenu();
-        AdminCredentials loadAdminCredentials();
-        void saveAdminCredentials(const AdminCredentials &a);
-        void updateAdminCredentials();
-        void displayAdminCredentials();
+public:
+    // Functions to manage hotel operations
+    void addClient();                            // Function to add a new client
+    bool checkRoomAvailability(int roomQuality); // Function to check room availability
+    vector<int> loadRoomAvailable();
+    void saveRoomAvailable(const vector<int> &roomsRemains);
+    void saveGuestDetails(const vector<GuestDetails> &guestDetails); // Save guest details to a file
+    vector<GuestDetails> loadGuestDetails();                         // Load guest details from a file
+    void displayGuestDetails();
+    void guest();
+    void guestMenu(const GuestDetails &g);
+    void dispalyOneGuestDetails(const GuestDetails &g);
+    int billing(string roomQuality, int days);
+    int orderFood();
+    void receipt(const GuestDetails &g);
+    void deleteGuest();
+    void adminLogin();
+    void adminMenu();
+    AdminCredentials loadAdminCredentials();
+    void saveAdminCredentials(const AdminCredentials &a);
+    void updateAdminCredentials();
+    void displayAdminCredentials();
 };
 
 // Global object for Hotel class
@@ -74,19 +75,23 @@ void mainMenu();
 void hotelDetails();
 void displayBookedRooms();
 
-void Hotel::displayAdminCredentials(){
+void Hotel::displayAdminCredentials()
+{
     AdminCredentials a = loadAdminCredentials();
-    if(!a.update){
+    if (!a.update)
+    {
         cout << "username: " << adminUsername << endl;
         cout << "Password: " << adminPassword << endl;
     }
-    else{
+    else
+    {
         cout << "username: " << a.newAdminUsername << endl;
         cout << "password: " << a.newAdminPassword << endl;
-        }
+    }
 }
 
-void Hotel::updateAdminCredentials(){
+void Hotel::updateAdminCredentials()
+{
     AdminCredentials a;
     string password;
     string confirm;
@@ -95,36 +100,39 @@ void Hotel::updateAdminCredentials(){
     cin.ignore();
     getline(cin, a.newAdminUsername);
 
-    while(true){
+    while (true)
+    {
         cout << "Enter the password: ";
         getline(cin, password);
 
         cout << "Confirm the password: ";
         getline(cin, confirm);
 
-        if(confirm == password){
+        if (confirm == password)
+        {
             a.newAdminPassword = confirm;
             break;
-        }else{
+        }
+        else
+        {
             cout << "\nWrong Password\n"
                  << endl;
         }
     }
-
-    
-
-
     a.update = true;
 
     saveAdminCredentials(a);
     cout << "Update successfull" << endl;
 }
 
-AdminCredentials Hotel::loadAdminCredentials(){
+AdminCredentials Hotel::loadAdminCredentials()
+{
     AdminCredentials a;
     ifstream file(adminCredentialsFile);
-    if(file.is_open()){
-        while(file>>a.newAdminUsername){
+    if (file.is_open())
+    {
+        while (file >> a.newAdminUsername)
+        {
             file >> a.newAdminPassword;
             file >> a.update;
         }
@@ -133,29 +141,36 @@ AdminCredentials Hotel::loadAdminCredentials(){
     return a;
 }
 
-
-void Hotel::saveAdminCredentials(const AdminCredentials &a){
+void Hotel::saveAdminCredentials(const AdminCredentials &a)
+{
     ofstream file(adminCredentialsFile, ios::trunc);
-    if(file.is_open()){
+    if (file.is_open())
+    {
         file << a.newAdminUsername << endl;
-        file << a.newAdminPassword <<endl;
+        file << a.newAdminPassword << endl;
         file << a.update;
     }
-    else{
+    else
+    {
         cout << "File is not opened" << endl;
     }
     file.close();
 }
-void Hotel::adminMenu(){
+void Hotel::adminMenu()
+{
     AdminCredentials a = loadAdminCredentials();
     int choice = 0;
-    if(!a.update){
+    if (!a.update)
+    {
         cout << "\n Hello " << adminUsername;
-    }else{
+    }
+    else
+    {
         cout << "\n Hello " << a.newAdminUsername;
     }
-    
-    do{
+
+    do
+    {
         cout << "\n------ Admin Menu -------" << endl;
         cout << "1. View guests' details" << endl;
         cout << "2. Delete a guest" << endl;
@@ -182,7 +197,7 @@ void Hotel::adminMenu(){
             displayAdminCredentials();
             break;
         case 5:
-            cout<<"Exiting..."<<endl;
+            cout << "Exiting..." << endl;
             break;
         default:
             cout << "Wrong Input!" << endl;
@@ -192,18 +207,21 @@ void Hotel::adminMenu(){
     } while (choice != 5);
 }
 
-void Hotel::adminLogin(){
+void Hotel::adminLogin()
+{
     string username, password;
     AdminCredentials a = loadAdminCredentials();
     cout << "\n--- Admin Login ---\n";
 
-    while(true){
+    while (true)
+    {
         cout << "Enter username: ";
         cin >> username;
         cout << "Enter password: ";
         cin >> password;
 
-        if(!a.update){
+        if (!a.update)
+        {
             if (username == adminUsername && password == adminPassword)
             {
                 cout << "\nLogin successful!\n";
@@ -213,7 +231,9 @@ void Hotel::adminLogin(){
             {
                 cout << "\nInvalid credentials. Access denied.\n";
             }
-        }else{
+        }
+        else
+        {
             if (username == a.newAdminUsername && password == a.newAdminPassword)
             {
                 cout << "\nLogin successful!\n";
@@ -224,15 +244,14 @@ void Hotel::adminLogin(){
                 cout << "\nInvalid credentials. Access denied.\n";
             }
         }
-
-        
-        
     }
     adminMenu();
 }
 
-void Hotel::deleteGuest(){
+void Hotel::deleteGuest()
+{
     vector<GuestDetails> guestDetails = loadGuestDetails();
+    vector<int> roomsRemain = loadRoomAvailable();
     string rN;
     bool found = false;
 
@@ -248,8 +267,21 @@ void Hotel::deleteGuest(){
         {
             if (i->roomNumber == rN)
             {
+                if (i->roomQuality == "Luxury Suite"){
+                    roomsRemain.at(0) += 1;
+                }
+                else if (i->roomQuality == "Deluxe Rooms"){
+                    roomsRemain.at(1) += 1;
+                }
+                else if (i->roomQuality == "Standard Rooms"){
+                    roomsRemain.at(2) += 1;
+                }
+                else if (i->roomQuality == "Economy Rooms"){
+                    roomsRemain.at(3) += 1;
+                }
                 found = true;
                 guestDetails.erase(i);
+                saveRoomAvailable(roomsRemain);
                 saveGuestDetails(guestDetails);
                 cout << "The guest has been deleted successfully\n"
                      << endl;
@@ -263,7 +295,8 @@ void Hotel::deleteGuest(){
     }
 }
 
-void Hotel::receipt(const GuestDetails &g){
+void Hotel::receipt(const GuestDetails &g)
+{
     int bill = billing(g.roomQuality, g.days);
     cout << "\n\t------ RECEIPT ------" << endl;
     cout << "\tGiovanna's Luxury Inn" << endl;
@@ -273,9 +306,11 @@ void Hotel::receipt(const GuestDetails &g){
     cout << "Room number of the client: " << g.roomNumber << endl;
     cout << "Room quality of the client: " << g.roomQuality << endl;
     cout << "Days to stay: " << g.days << endl;
-    cout << "Price to stay: $" << bill << endl<<endl;
-    cout << "\t------ End Of Receipt -------" <<endl;
-    cout << "\t------ Thank you -------" <<endl<<endl;
+    cout << "Price to stay: $" << bill << endl
+         << endl;
+    cout << "\t------ End Of Receipt -------" << endl;
+    cout << "\t------ Thank you -------" << endl
+         << endl;
 }
 
 void Hotel::guestMenu(const GuestDetails &g)
